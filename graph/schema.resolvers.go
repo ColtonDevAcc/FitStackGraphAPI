@@ -8,22 +8,18 @@ import (
 	"fmt"
 
 	"github.com/VooDooStack/FitStackAPI/graph/generated"
-	"github.com/VooDooStack/FitStackAPI/graph/model"
+	"github.com/VooDooStack/FitStackAPI/models"
 )
 
-func (r *mutationResolver) CreateTodo(ctx context.Context, input model.NewTodo) (*model.Todo, error) {
+func (r *userResolver) Username(ctx context.Context, obj *models.User) (string, error) {
 	panic(fmt.Errorf("not implemented"))
 }
 
-func (r *queryResolver) Todos(ctx context.Context) ([]*model.Todo, error) {
+func (r *userResolver) Posts(ctx context.Context, obj *models.User) ([]*models.Post, error) {
 	panic(fmt.Errorf("not implemented"))
 }
 
-// Mutation returns generated.MutationResolver implementation.
-func (r *Resolver) Mutation() generated.MutationResolver { return &mutationResolver{r} }
+// User returns generated.UserResolver implementation.
+func (r *Resolver) User() generated.UserResolver { return &userResolver{r} }
 
-// Query returns generated.QueryResolver implementation.
-func (r *Resolver) Query() generated.QueryResolver { return &queryResolver{r} }
-
-type mutationResolver struct{ *Resolver }
-type queryResolver struct{ *Resolver }
+type userResolver struct{ *Resolver }

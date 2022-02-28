@@ -55,6 +55,6 @@ models:
       - github.com/99designs/gqlgen/graphql.Int64
       - github.com/99designs/gqlgen/graphql.Int32
   User:
-    model: github.com/VooDooStack/FitStackAPI/models.User
+    model: github.com/VooDooStack/FitStackAPI/models/models.User
   Post:
-    model: github.com/VooDooStack/FitStackAPI/models.Post
+    model: github.com/VooDooStack/FitStackAPI/models/models.Post
