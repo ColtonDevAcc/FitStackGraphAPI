@@ -1,4 +1,4 @@
-module github.com/ColtonDevAcc/FitStackAPI
+module github.com/VooDooStack/FitStackAPI
 
 go 1.17
 

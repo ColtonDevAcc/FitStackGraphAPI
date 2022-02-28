@@ -35,7 +35,7 @@ resolver:
 # gqlgen will search for any type names in the schema in these go packages
 # if they match it will use them, otherwise it will generate them.
 autobind:
-  - "github.com/ColtonDevAcc/FitStackAPI/graph/model"
+  - "github.com/VooDooStack/FitStackAPI/graph/model"
 
 # This section declares type mapping between the GraphQL and go type systems
 #
@@ -54,17 +54,7 @@ models:
       - github.com/99designs/gqlgen/graphql.Int
       - github.com/99designs/gqlgen/graphql.Int64
       - github.com/99designs/gqlgen/graphql.Int32
-#####################################################################################################################
-# ├── go.mod
-# ├── go.sum
-# ├── gqlgen.yml               - The gqlgen config file, knobs for controlling the generated code.
-# ├── graph
-# │   ├── generated            - A package that only contains the generated runtime
-# │   │   └── generated.go
-# │   ├── model                - A package for all your graph models, generated or otherwise
-# │   │   └── models_gen.go
-# │   ├── resolver.go          - The root graph resolver type. This file wont get regenerated
-# │   ├── schema.graphqls      - Some schema. You can split the schema into as many graphql files as you like
-# │   └── schema.resolvers.go  - the resolver implementation for schema.graphql
-# └── server.go
-#####################################################################################################################
+  User:
+    model: github.com/VooDooStack/FitStackAPI/models.User
+  Post:
+    model: github.com/VooDooStack/FitStackAPI/models.Post

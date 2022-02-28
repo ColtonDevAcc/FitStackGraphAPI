@@ -7,8 +7,8 @@ import (
 
 	"github.com/99designs/gqlgen/graphql/handler"
 	"github.com/99designs/gqlgen/graphql/playground"
-	"github.com/ColtonDevAcc/FitStackAPI/graph"
-	"github.com/ColtonDevAcc/FitStackAPI/graph/generated"
+	"github.com/VooDooStack/FitStackAPI/graph"
+	"github.com/VooDooStack/FitStackAPI/graph/generated"
 )
 
 const defaultPort = "8080"

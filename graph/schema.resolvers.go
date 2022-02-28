@@ -7,8 +7,8 @@ import (
 	"context"
 	"fmt"
 
-	"github.com/ColtonDevAcc/FitStackAPI/graph/generated"
-	"github.com/ColtonDevAcc/FitStackAPI/graph/model"
+	"github.com/VooDooStack/FitStackAPI/graph/generated"
+	"github.com/VooDooStack/FitStackAPI/graph/model"
 )
 
 func (r *mutationResolver) CreateTodo(ctx context.Context, input model.NewTodo) (*model.Todo, error) {
