@@ -1,4 +1,4 @@
-module github.com/VooDooStack/FitStackAPI
+module github.com/voodoostack/fitstackapi
 
 go 1.17
 

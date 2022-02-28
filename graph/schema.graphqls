@@ -1,9 +1,11 @@
+# GraphQL schema example
+#
+# https://gqlgen.com/getting-started/
+
 type User {
   id: ID!
   username: String!
   email: String!
-  firstName: String!
-  lastName: String!
 
   posts: [Post]!
 }
@@ -11,6 +13,8 @@ type User {
 type Post {
   id: ID!
   title: String!
+  body: String!
+  auther: User!
 }
 
 type Query {
