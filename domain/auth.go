@@ -46,6 +46,16 @@ func (as *AuthServices) Register(ctx context.Context, input fitstackapi.Register
 	if err != nil {
 		return fitstackapi.AuthResponse{}, fmt.Errorf("error hasing password: %w", err)
 	}
-
 	user.Password = string(hashPassword)
+
+	//! create the user
+	user, err = as.UserRepo.Create(ctx, user)
+	if err != nil {
+		return fitstackapi.AuthResponse{}, fmt.Errorf("error creating user: %v", err)
+	}
+
+	return fitstackapi.AuthResponse{
+		AccessToken: "token",
+		User:        user,
+	}, nil
 }
