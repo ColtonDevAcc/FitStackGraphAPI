@@ -46,3 +46,18 @@ func TestRegisterInput_Validate(t *testing.T) {
 		})
 	}
 }
+
+func TestAuthServices_Login(t *testing.T) {
+	input := LoginInput{
+		Email:    "BoBB@gmail.com",
+		Password: "Password",
+	}
+
+	want := LoginInput{
+		Email:    "bobb@gmail.com",
+		Password: "Password",
+	}
+
+	input.Sanitize()
+	require.Equal(t, want, input)
+}

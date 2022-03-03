@@ -16,6 +16,7 @@ var emailRegexp = regexp.MustCompile("^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0
 
 type Auth interface {
 	Register(ctx context.Context, input RegisterInput) (AuthResponse, error)
+	Login(ctx context.Context, input LoginInput) (AuthResponse error)
 }
 
 type AuthResponse struct {
@@ -56,5 +57,31 @@ func (in RegisterInput) ValidateInput() error {
 		return fmt.Errorf("%w: password must match the confirm password", ErrValidation)
 
 	}
+	return nil
+}
+
+type LoginInput struct {
+	Email    string
+	Password string
+}
+
+func (in *LoginInput) Sanitize() {
+	in.Email = strings.TrimSpace(in.Email)
+	in.Email = strings.ToLower(in.Email)
+
+}
+
+func (in LoginInput) ValidateInput() error {
+
+	if !emailRegexp.MatchString(in.Email) {
+		return fmt.Errorf("%w: email not valid", ErrValidation)
+
+	}
+
+	if len(in.Password) < 1 {
+		return fmt.Errorf("%w: password required", ErrValidation)
+
+	}
+
 	return nil
 }
