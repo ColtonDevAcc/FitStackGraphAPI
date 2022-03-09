@@ -14,7 +14,7 @@ var (
 
 var emailRegexp = regexp.MustCompile("^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$")
 
-type Auth interface {
+type AuthService interface {
 	Register(ctx context.Context, input RegisterInput) (AuthResponse, error)
 	Login(ctx context.Context, input LoginInput) (AuthResponse error)
 }
