@@ -12,7 +12,7 @@ import (
 //go:generate go run github.com/99designs/gqlgen generate
 
 type Resolver struct {
-	AuthServices fitstackapi.AuthService
+	AuthService fitstackapi.AuthService
 }
 
 type queryResolver struct {

@@ -13,6 +13,7 @@ import (
 	"github.com/go-chi/chi"
 	"github.com/go-chi/chi/v5/middleware"
 	"github.com/voodoostack/fitstackapi/config"
+	"github.com/voodoostack/fitstackapi/domain"
 	"github.com/voodoostack/fitstackapi/graph"
 	"github.com/voodoostack/fitstackapi/postgres"
 )
@@ -46,11 +47,19 @@ func main() {
 	router.Use(middleware.RedirectSlashes)
 	router.Use(middleware.Timeout(time.Second * 60))
 
+	//! REPOST
+	userRepo := postgres.NewUserRepo(db)
+
+	//! SERVICES
+	authService := domain.NewAuthService(userRepo)
+
 	router.Handle("/", playground.Handler("FitStackAPI", "/query"))
 	router.Handle("/query", handler.NewDefaultServer(
 		graph.NewExecutableSchema(
 			graph.Config{
-				Resolvers: &graph.Resolver{},
+				Resolvers: &graph.Resolver{
+					AuthService: authService,
+				},
 			},
 		),
 	))
