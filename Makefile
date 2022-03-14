@@ -5,15 +5,15 @@ mock:
 
 migrate:
 	migrate -source file://postgres/migrations \
-			-database postgres://postgres:postgres@127.0.0.1:5432/fitstackapi_development?sslmode=disable up
+			-database postgres://postgres:postgres@35.223.54.178:5432/fitstackapi_development?sslmode=disable up
 
 rollback:
 	migrate -source file://postgres/migrations \
-			-database postgres://postgres:postgres@127.0.0.1:5432/fitstackapi_development?sslmode=disable down
+			-database postgres://postgres:postgres@35.223.54.178:5432/fitstackapi_development?sslmode=disable down
 
 drop:
 	migrate -source file://postgres/migrations \
-			-database postgres://postgres:postgres@127.0.0.1:5432/fitstackapi_development?sslmode=disable drop
+			-database postgres://postgres:postgres@35.223.54.178:5432/fitstackapi_development?sslmode=disable drop
 
 migration:
 	@read -p "Enter migration name: " name; \

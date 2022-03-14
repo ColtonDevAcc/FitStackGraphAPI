@@ -30,12 +30,12 @@ func (as *AuthServices) Register(ctx context.Context, input fitstackapi.Register
 		return fitstackapi.AuthResponse{}, err
 	}
 
-	//! does user exist ?
+	// check if username is already taken
 	if _, err := as.UserRepo.GetByUsername(ctx, input.Username); !errors.Is(err, fitstackapi.ErrNotFound) {
 		return fitstackapi.AuthResponse{}, fitstackapi.ErrUserNameTaken
 	}
 
-	//! is user email taken ?
+	// check if email is already taken
 	if _, err := as.UserRepo.GetByEmail(ctx, input.Email); !errors.Is(err, fitstackapi.ErrNotFound) {
 		return fitstackapi.AuthResponse{}, fitstackapi.ErrEmailTaken
 	}

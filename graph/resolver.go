@@ -31,7 +31,7 @@ func (r *Resolver) Mutation() MutationResolver {
 	return &mutationResolver{r}
 }
 
-func buildBadrequestError(ctx context.Context, err error) error {
+func buildBadRequestError(ctx context.Context, err error) error {
 	return &gqlerror.Error{
 		Message: err.Error(),
 		Path:    graphql.GetPath(ctx),

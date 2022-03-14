@@ -48,8 +48,8 @@ type ComplexityRoot struct {
 	}
 
 	Mutation struct {
-		LoginInput func(childComplexity int, input LoginInput) int
-		Register   func(childComplexity int, input RegisterInput) int
+		Login    func(childComplexity int, input LoginInput) int
+		Register func(childComplexity int, input RegisterInput) int
 	}
 
 	Query struct {
@@ -66,7 +66,7 @@ type ComplexityRoot struct {
 
 type MutationResolver interface {
 	Register(ctx context.Context, input RegisterInput) (*AuthResponse, error)
-	LoginInput(ctx context.Context, input LoginInput) (*AuthResponse, error)
+	Login(ctx context.Context, input LoginInput) (*AuthResponse, error)
 }
 type QueryResolver interface {
 	Me(ctx context.Context) (*User, error)
@@ -101,17 +101,17 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.AuthResponse.User(childComplexity), true
 
-	case "Mutation.LoginInput":
-		if e.complexity.Mutation.LoginInput == nil {
+	case "Mutation.login":
+		if e.complexity.Mutation.Login == nil {
 			break
 		}
 
-		args, err := ec.field_Mutation_LoginInput_args(context.TODO(), rawArgs)
+		args, err := ec.field_Mutation_login_args(context.TODO(), rawArgs)
 		if err != nil {
 			return 0, false
 		}
 
-		return e.complexity.Mutation.LoginInput(childComplexity, args["input"].(LoginInput)), true
+		return e.complexity.Mutation.Login(childComplexity, args["input"].(LoginInput)), true
 
 	case "Mutation.register":
 		if e.complexity.Mutation.Register == nil {
@@ -232,6 +232,7 @@ type User {
   email: String!
   createdAt: Time!
 }
+
 type AuthResponse {
   accessToken: String!
   user: User!
@@ -254,8 +255,8 @@ type Query {
 }
 
 type Mutation {
-  register(input: RegisterInput!): AuthResponse
-  LoginInput(input: LoginInput!): AuthResponse
+  register(input: RegisterInput!): AuthResponse!
+  login(input: LoginInput!): AuthResponse!
 }
 `, BuiltIn: false},
 }
@@ -265,7 +266,7 @@ var parsedSchema = gqlparser.MustLoadSchema(sources...)
 
 // region    ***************************** args.gotpl *****************************
 
-func (ec *executionContext) field_Mutation_LoginInput_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
+func (ec *executionContext) field_Mutation_login_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
 	var err error
 	args := map[string]interface{}{}
 	var arg0 LoginInput
@@ -450,14 +451,17 @@ func (ec *executionContext) _Mutation_register(ctx context.Context, field graphq
 		return graphql.Null
 	}
 	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
 		return graphql.Null
 	}
 	res := resTmp.(*AuthResponse)
 	fc.Result = res
-	return ec.marshalOAuthResponse2ᚖgithubᚗcomᚋvoodoostackᚋfitstackapiᚋgraphᚐAuthResponse(ctx, field.Selections, res)
+	return ec.marshalNAuthResponse2ᚖgithubᚗcomᚋvoodoostackᚋfitstackapiᚋgraphᚐAuthResponse(ctx, field.Selections, res)
 }
 
-func (ec *executionContext) _Mutation_LoginInput(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+func (ec *executionContext) _Mutation_login(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
 	defer func() {
 		if r := recover(); r != nil {
 			ec.Error(ctx, ec.Recover(ctx, r))
@@ -474,7 +478,7 @@ func (ec *executionContext) _Mutation_LoginInput(ctx context.Context, field grap
 
 	ctx = graphql.WithFieldContext(ctx, fc)
 	rawArgs := field.ArgumentMap(ec.Variables)
-	args, err := ec.field_Mutation_LoginInput_args(ctx, rawArgs)
+	args, err := ec.field_Mutation_login_args(ctx, rawArgs)
 	if err != nil {
 		ec.Error(ctx, err)
 		return graphql.Null
@@ -482,18 +486,21 @@ func (ec *executionContext) _Mutation_LoginInput(ctx context.Context, field grap
 	fc.Args = args
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return ec.resolvers.Mutation().LoginInput(rctx, args["input"].(LoginInput))
+		return ec.resolvers.Mutation().Login(rctx, args["input"].(LoginInput))
 	})
 	if err != nil {
 		ec.Error(ctx, err)
 		return graphql.Null
 	}
 	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
 		return graphql.Null
 	}
 	res := resTmp.(*AuthResponse)
 	fc.Result = res
-	return ec.marshalOAuthResponse2ᚖgithubᚗcomᚋvoodoostackᚋfitstackapiᚋgraphᚐAuthResponse(ctx, field.Selections, res)
+	return ec.marshalNAuthResponse2ᚖgithubᚗcomᚋvoodoostackᚋfitstackapiᚋgraphᚐAuthResponse(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) _Query_me(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
@@ -2078,13 +2085,19 @@ func (ec *executionContext) _Mutation(ctx context.Context, sel ast.SelectionSet)
 
 			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, innerFunc)
 
-		case "LoginInput":
+			if out.Values[i] == graphql.Null {
+				invalids++
+			}
+		case "login":
 			innerFunc := func(ctx context.Context) (res graphql.Marshaler) {
-				return ec._Mutation_LoginInput(ctx, field)
+				return ec._Mutation_login(ctx, field)
 			}
 
 			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, innerFunc)
 
+			if out.Values[i] == graphql.Null {
+				invalids++
+			}
 		default:
 			panic("unknown field " + strconv.Quote(field.Name))
 		}
@@ -2644,6 +2657,20 @@ func (ec *executionContext) ___Type(ctx context.Context, sel ast.SelectionSet, o
 
 // region    ***************************** type.gotpl *****************************
 
+func (ec *executionContext) marshalNAuthResponse2githubᚗcomᚋvoodoostackᚋfitstackapiᚋgraphᚐAuthResponse(ctx context.Context, sel ast.SelectionSet, v AuthResponse) graphql.Marshaler {
+	return ec._AuthResponse(ctx, sel, &v)
+}
+
+func (ec *executionContext) marshalNAuthResponse2ᚖgithubᚗcomᚋvoodoostackᚋfitstackapiᚋgraphᚐAuthResponse(ctx context.Context, sel ast.SelectionSet, v *AuthResponse) graphql.Marshaler {
+	if v == nil {
+		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	return ec._AuthResponse(ctx, sel, v)
+}
+
 func (ec *executionContext) unmarshalNBoolean2bool(ctx context.Context, v interface{}) (bool, error) {
 	res, err := graphql.UnmarshalBoolean(v)
 	return res, graphql.ErrorOnPath(ctx, err)
@@ -2975,13 +3002,6 @@ func (ec *executionContext) marshalN__TypeKind2string(ctx context.Context, sel a
 		}
 	}
 	return res
-}
-
-func (ec *executionContext) marshalOAuthResponse2ᚖgithubᚗcomᚋvoodoostackᚋfitstackapiᚋgraphᚐAuthResponse(ctx context.Context, sel ast.SelectionSet, v *AuthResponse) graphql.Marshaler {
-	if v == nil {
-		return graphql.Null
-	}
-	return ec._AuthResponse(ctx, sel, v)
 }
 
 func (ec *executionContext) unmarshalOBoolean2bool(ctx context.Context, v interface{}) (bool, error) {

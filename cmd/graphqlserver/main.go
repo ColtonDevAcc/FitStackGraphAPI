@@ -11,7 +11,7 @@ import (
 	"github.com/99designs/gqlgen/graphql/handler"
 	"github.com/99designs/gqlgen/graphql/playground"
 	"github.com/go-chi/chi"
-	"github.com/go-chi/chi/v5/middleware"
+	"github.com/go-chi/chi/middleware"
 	"github.com/voodoostack/fitstackapi/config"
 	"github.com/voodoostack/fitstackapi/domain"
 	"github.com/voodoostack/fitstackapi/graph"

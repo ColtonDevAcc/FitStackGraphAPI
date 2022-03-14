@@ -26,7 +26,7 @@ func (m *mutationResolver) Register(ctx context.Context, input RegisterInput) (*
 		case errors.Is(err, fitstackapi.ErrNotFound) ||
 			errors.Is(err, fitstackapi.ErrEmailTaken) ||
 			errors.Is(err, fitstackapi.ErrUserNameTaken):
-			return nil, buildBadrequestError(ctx, err)
+			return nil, buildBadRequestError(ctx, err)
 		default:
 			return nil, err
 		}
@@ -34,22 +34,20 @@ func (m *mutationResolver) Register(ctx context.Context, input RegisterInput) (*
 
 	return mapAuthResponse(res), nil
 }
-func (m *mutationResolver) LoginInput(ctx context.Context, input LoginInput) (*AuthResponse, error) {
+func (m *mutationResolver) Login(ctx context.Context, input LoginInput) (*AuthResponse, error) {
 	res, err := m.AuthService.Login(ctx, fitstackapi.LoginInput{
 		Email:    input.Email,
 		Password: input.Password,
 	})
 	if err != nil {
 		switch {
-		case errors.Is(err, fitstackapi.ErrNotFound) ||
-			errors.Is(err, fitstackapi.ErrEmailTaken) ||
-			errors.Is(err, fitstackapi.ErrUserNameTaken):
-			return nil, buildBadrequestError(ctx, err)
+		case errors.Is(err, fitstackapi.ErrValidation) ||
+			errors.Is(err, fitstackapi.ErrBadCredentials):
+			return nil, buildBadRequestError(ctx, err)
 		default:
 			return nil, err
 		}
 	}
 
 	return mapAuthResponse(res), nil
-
 }

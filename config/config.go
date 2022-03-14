@@ -22,7 +22,7 @@ type Config struct {
 }
 
 func LoadEnv(fileName string) {
-	re := regexp.MustCompile(`^(.*` + "fitstack" + `)`)
+	re := regexp.MustCompile(`^(.*` + "twitter" + `)`)
 	cwd, _ := os.Getwd()
 	rootPath := re.Find([]byte(cwd))
 
