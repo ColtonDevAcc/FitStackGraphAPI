@@ -1,9 +1,13 @@
 {
-	"cSpell.words": [
-		"godotenv",
-		"honnef",
-		"jackc",
-		"joho",
-		"stretchr"
-	]
+  "cSpell.words": [
+	"georgysavva",
+	"godotenv",
+	"honnef",
+	"jackc",
+	"joho",
+	"lestrrat",
+	"pgxscan",
+	"scany",
+	"stretchr"
+]
 }

@@ -40,7 +40,7 @@ func (ur *UserRepo) Create(ctx context.Context, user fitstackapi.User) (fitstack
 }
 
 func createUser(ctx context.Context, tx pgx.Tx, user fitstackapi.User) (fitstackapi.User, error) {
-	query := "INSERT INTO users (email, username, password) VALUES ($1, $2, $3) RETURNING *;"
+	query := `INSERT INTO users (email, username, password) VALUES ($1, $2, $3) RETURNING *;`
 
 	u := fitstackapi.User{}
 
@@ -52,7 +52,10 @@ func createUser(ctx context.Context, tx pgx.Tx, user fitstackapi.User) (fitstack
 
 func (ur *UserRepo) GetByUsername(ctx context.Context, username string) (fitstackapi.User, error) {
 	query := `SELECT * FROM users WHERE username = $1 LIMIT 1;`
+<<<<<<< HEAD
 
+=======
+>>>>>>> 05cda12d7a6807133a4cc9757955f753adf7ef09
 	u := fitstackapi.User{}
 
 	if err := pgxscan.Get(ctx, ur.DB.Pool, &u, query, username); err != nil {
@@ -64,8 +67,9 @@ func (ur *UserRepo) GetByUsername(ctx context.Context, username string) (fitstac
 	}
 	return u, nil
 }
+
 func (ur *UserRepo) GetByEmail(ctx context.Context, email string) (fitstackapi.User, error) {
-	query := "SELECT * FROM user WHERE email = $1 LIMIT 1;"
+	query := `SELECT * FROM users WHERE email = $1 LIMIT 1;`
 	u := fitstackapi.User{}
 
 	if err := pgxscan.Get(ctx, ur.DB.Pool, &u, query, email); err != nil {

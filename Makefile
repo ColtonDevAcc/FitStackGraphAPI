@@ -17,7 +17,7 @@ drop:
 
 migration:
 	@read -p "Enter migration name: " name; \
-		migrate create -ext sql -dir postgres/migrations $$name
+		migrate create -ext sql -dir postgres/migrations $name
 
 run:
 	go run cmd/graphqlserver/*.go
