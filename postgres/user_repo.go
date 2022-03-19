@@ -52,10 +52,7 @@ func createUser(ctx context.Context, tx pgx.Tx, user fitstackapi.User) (fitstack
 
 func (ur *UserRepo) GetByUsername(ctx context.Context, username string) (fitstackapi.User, error) {
 	query := `SELECT * FROM users WHERE username = $1 LIMIT 1;`
-<<<<<<< HEAD
 
-=======
->>>>>>> 05cda12d7a6807133a4cc9757955f753adf7ef09
 	u := fitstackapi.User{}
 
 	if err := pgxscan.Get(ctx, ur.DB.Pool, &u, query, username); err != nil {
