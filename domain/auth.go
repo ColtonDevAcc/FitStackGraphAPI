@@ -14,12 +14,14 @@ var (
 )
 
 type AuthServices struct {
-	UserRepo fitstackapi.UserRepo
+	AuthTokenService fitstackapi.AuthTokenService
+	UserRepo         fitstackapi.UserRepo
 }
 
-func NewAuthService(ur fitstackapi.UserRepo) *AuthServices {
+func NewAuthService(ur fitstackapi.UserRepo, ats fitstackapi.AuthTokenService) *AuthServices {
 	return &AuthServices{
-		UserRepo: ur,
+		AuthTokenService: ats,
+		UserRepo:         ur,
 	}
 }
 
@@ -58,8 +60,13 @@ func (as *AuthServices) Register(ctx context.Context, input fitstackapi.Register
 		return fitstackapi.AuthResponse{}, fmt.Errorf("error creating user: %v", err)
 	}
 
+	accessToken, err := as.AuthTokenService.CreateAccessToken(ctx, user)
+	if err != nil {
+		return fitstackapi.AuthResponse{}, fitstackapi.ErrGenAccessToken
+	}
+
 	return fitstackapi.AuthResponse{
-		AccessToken: "token",
+		AccessToken: accessToken,
 		User:        user,
 	}, nil
 }
@@ -86,8 +93,13 @@ func (as *AuthServices) Login(ctx context.Context, input fitstackapi.LoginInput)
 		return fitstackapi.AuthResponse{}, fitstackapi.ErrBadCredentials
 	}
 
+	accessToken, err := as.AuthTokenService.CreateAccessToken(ctx, user)
+	if err != nil {
+		return fitstackapi.AuthResponse{}, fitstackapi.ErrGenAccessToken
+	}
+
 	return fitstackapi.AuthResponse{
-		AccessToken: "token",
+		AccessToken: accessToken,
 		User:        user,
 	}, nil
 }

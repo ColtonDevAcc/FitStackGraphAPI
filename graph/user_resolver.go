@@ -16,5 +16,12 @@ func mapUser(u fitstackapi.User) *User {
 }
 
 func (q *queryResolver) Me(ctx context.Context) (*User, error) {
-	panic("implement me")
+	UserID, err := fitstackapi.GetUserIDFromContext(ctx)
+	if err != nil {
+		return nil, fitstackapi.ErrUserNotAuthenticated
+	}
+
+	return mapUser(fitstackapi.User{
+		ID: UserID,
+	}), nil
 }

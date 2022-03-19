@@ -15,6 +15,7 @@ import (
 	"github.com/voodoostack/fitstackapi/config"
 	"github.com/voodoostack/fitstackapi/domain"
 	"github.com/voodoostack/fitstackapi/graph"
+	"github.com/voodoostack/fitstackapi/jwt"
 	"github.com/voodoostack/fitstackapi/postgres"
 )
 
@@ -41,17 +42,19 @@ func main() {
 
 	router := chi.NewRouter()
 
+	//! REPOST
+	userRepo := postgres.NewUserRepo(db)
+
+	//! SERVICES
+	authTokenServices := jwt.NewTokenService(conf)
+	authService := domain.NewAuthService(userRepo, authTokenServices)
+
+	router.Use(authMiddleware(authTokenServices))
 	router.Use(middleware.Logger)
 	router.Use(middleware.RequestID)
 	router.Use(middleware.Recoverer)
 	router.Use(middleware.RedirectSlashes)
 	router.Use(middleware.Timeout(time.Second * 60))
-
-	//! REPOST
-	userRepo := postgres.NewUserRepo(db)
-
-	//! SERVICES
-	authService := domain.NewAuthService(userRepo)
 
 	router.Handle("/", playground.Handler("FitStackAPI", "/query"))
 	router.Handle("/query", handler.NewDefaultServer(

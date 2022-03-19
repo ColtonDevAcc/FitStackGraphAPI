@@ -2,7 +2,7 @@ module github.com/voodoostack/fitstackapi
 
 go 1.17
 
-require golang.org/x/crypto v0.0.0-20220214200702-86341886e292
+require golang.org/x/crypto v0.0.0-20220315160706-3147a52a75dd
 
 require (
 	github.com/agnivade/levenshtein v1.1.0 // indirect

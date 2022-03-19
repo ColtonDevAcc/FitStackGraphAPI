@@ -14,6 +14,8 @@ import (
 
 var signatureType = jwa.HS256
 
+var now = time.Now
+
 type TokenService struct {
 	Conf *config.Config
 }
@@ -32,8 +34,9 @@ func (ts *TokenService) ParseTokenFromRequest(ctx context.Context, r *http.Reque
 		jwtGo.WithVerify(signatureType, []byte(ts.Conf.JWT.Secret)),
 	)
 	if err != nil {
-		return fitstackapi.AuthToken{}, nil
+		return fitstackapi.AuthToken{}, fitstackapi.ErrInvalidAccessToken
 	}
+
 	return buildToken(token), nil
 }
 
@@ -77,15 +80,11 @@ func (ts *TokenService) CreateRefreshToken(ctx context.Context, user fitstackapi
 	return string(token), nil
 }
 
-func (ts *TokenService) CreateAccessToken(ctx context.Context, user fitstackapi.User, tokenID string) (string, error) {
+func (ts *TokenService) CreateAccessToken(ctx context.Context, user fitstackapi.User) (string, error) {
 	t := jwtGo.New()
 
 	if err := setDefaultToken(t, user, fitstackapi.AccessTokenLifetime, ts.Conf); err != nil {
 		return "", err
-	}
-
-	if err := t.Set(jwtGo.JwtIDKey, tokenID); err != nil {
-		return "", fmt.Errorf("error set jwt id: %v", err)
 	}
 
 	token, err := jwtGo.Sign(t, signatureType, []byte(ts.Conf.JWT.Secret))
@@ -98,22 +97,20 @@ func (ts *TokenService) CreateAccessToken(ctx context.Context, user fitstackapi.
 
 func setDefaultToken(t jwtGo.Token, user fitstackapi.User, lifetime time.Duration, conf *config.Config) error {
 	if err := t.Set(jwtGo.SubjectKey, user.ID); err != nil {
-		return fmt.Errorf("error set jwt SubjectKey: %v", err)
+		return fmt.Errorf("error set jwt sub: %v", err)
 	}
 
 	if err := t.Set(jwtGo.IssuerKey, conf.JWT.Issuer); err != nil {
-		return fmt.Errorf("error set jwt IssuerKey: %v", err)
-
+		return fmt.Errorf("error set jwt issuer key: %v", err)
 	}
 
-	if err := t.Set(jwtGo.IssuedAtKey, time.Now().Unix()); err != nil {
-		return fmt.Errorf("error set jwt IssuedAtKey key: %v", err)
-
+	if err := t.Set(jwtGo.IssuedAtKey, now().Unix()); err != nil {
+		return fmt.Errorf("error set jwt issued at key: %v", err)
 	}
 
-	if err := t.Set(jwtGo.ExpirationKey, time.Now().Add(lifetime).Unix()); err != nil {
-		return fmt.Errorf("error set jwt ExpirationKey: %v", err)
-
+	if err := t.Set(jwtGo.ExpirationKey, now().Add(lifetime).Unix()); err != nil {
+		return fmt.Errorf("error set jwt expired at: %v", err)
 	}
+
 	return nil
 }

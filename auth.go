@@ -3,12 +3,13 @@ package fitstackapi
 import (
 	"context"
 	"fmt"
+	"net/http"
 	"regexp"
 	"strings"
 )
 
 var (
-	UsernameMinLength = 4
+	UsernameMinLength = 2
 	PasswordMinLength = 6
 )
 
@@ -17,6 +18,13 @@ var emailRegexp = regexp.MustCompile("^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0
 type AuthService interface {
 	Register(ctx context.Context, input RegisterInput) (AuthResponse, error)
 	Login(ctx context.Context, input LoginInput) (AuthResponse, error)
+}
+
+type AuthTokenService interface {
+	CreateAccessToken(ctx context.Context, user User) (string, error)
+	CreateRefreshToken(ctx context.Context, user User, tokenID string) (string, error)
+	ParseToken(ctx context.Context, payload string) (AuthToken, error)
+	ParseTokenFromRequest(ctx context.Context, r *http.Request) (AuthToken, error)
 }
 
 type AuthToken struct {
