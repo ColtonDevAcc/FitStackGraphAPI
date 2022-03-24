@@ -15,17 +15,16 @@ RUN go mod download
 # Copy local code to the container image.
 COPY . ./
 
+ENV CGO_ENABLED=0
+
 # Build the binary.
 RUN go build -v -o server
 
 # Use the official Debian slim image for a lean production container.
 # https://hub.docker.com/_/debian
 # https://docs.docker.com/develop/develop-images/multistage-build/#use-multi-stage-builds
-FROM debian:latest
-RUN set -x && apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install -y \
-    ca-certificates && \
-    rm -rf /var/lib/apt/lists/*
-
+FROM alpine:latest
+RUN apk add --no-cache bash
 # Copy the binary to the production image from the builder stage.
 COPY --from=builder /app/server /app/server
 
@@ -34,3 +33,6 @@ CMD ["/app/server"]
 
 # [END run_helloworld_dockerfile]
 # [END cloudrun_helloworld_dockerfile]
+
+#build container first 
+##coltonbristow$ docker build -t server .
