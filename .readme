@@ -1,0 +1,1 @@
+deploy by running  gcloud run deploy some-random-service --source . --add-cloudsql-instances=fitstack-343223:us-central1:fitstackapi
