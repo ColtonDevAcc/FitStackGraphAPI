@@ -24,6 +24,6 @@ steps:
   - 'SOMEENV=$_SPANNER_CONNECTION_STRING'
   # If you want to add a CloudSQL Instance to your Cloud Run Service
   - '--add-cloudsql-instances=$_DB_CONNECTION'
+  #--add-cloudsql-instances=$fitstack-343223:us-central1:fitstackapi
   # DB_CONNECTION should look like: <project>:<region>:<sql-instance>
-
 #DATABASE_URL=/cloudsql/fitstack-343223:us-central1:fitstackapi

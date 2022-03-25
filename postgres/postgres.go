@@ -20,6 +20,7 @@ type DB struct {
 }
 
 func New(ctx context.Context, conf *config.Config) *DB {
+
 	dbConf, err := pgxpool.ParseConfig(conf.Database.URL)
 	if err != nil {
 		log.Fatalf("cant parse postgres config: %v", err)
