@@ -20,6 +20,7 @@ type DB struct {
 }
 
 func New(ctx context.Context, conf *config.Config) *DB {
+	fmt.Printf("this is your conf url %v  |||||", conf.Database.URL)
 
 	dbConf, err := pgxpool.ParseConfig(conf.Database.URL)
 	if err != nil {
