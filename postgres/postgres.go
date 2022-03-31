@@ -20,16 +20,14 @@ type DB struct {
 }
 
 func New(ctx context.Context, conf *config.Config) *DB {
-	fmt.Printf("this is your conf url %v  |||||", conf.Database.URL)
-
 	dbConf, err := pgxpool.ParseConfig(conf.Database.URL)
 	if err != nil {
-		log.Fatalf("cant parse postgres config: %v", err)
+		log.Fatalf("can't parse postgres config: %v", err)
 	}
 
 	pool, err := pgxpool.ConnectConfig(ctx, dbConf)
 	if err != nil {
-		log.Fatalf("cant connect to postgres: %v", err)
+		log.Fatalf("error connecting to postgres: %v", err)
 	}
 
 	db := &DB{Pool: pool, conf: conf}

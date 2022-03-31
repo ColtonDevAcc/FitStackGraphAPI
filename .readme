@@ -1,4 +1,4 @@
-deploy by running  gcloud run deploy some-random-service --source . --add-cloudsql-instances=fitstack-343223:us-central1:fitstackapi
+deploy by running  gcloud run deploy fitstackapi_development --source . --add-cloudsql-instances=fitstack-343223:us-central1:fitstackapi
 
 gcloud run deploy run-sql --image gcr.io/fitstack-343223/run-sql \
   --add-cloudsql-instances INSTANCE_CONNECTION_NAME \

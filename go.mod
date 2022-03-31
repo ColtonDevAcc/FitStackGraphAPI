@@ -49,6 +49,7 @@ require (
 	github.com/99designs/gqlgen v0.17.1
 	github.com/georgysavva/scany v0.3.0
 	github.com/go-chi/chi v1.5.4
+	github.com/go-sql-driver/mysql v1.6.0
 	github.com/golang-migrate/migrate/v4 v4.15.1
 	github.com/jackc/pgx/v4 v4.15.0
 	github.com/joho/godotenv v1.4.0

@@ -33,6 +33,7 @@ func main() {
 	}
 
 	port := os.Getenv("PORT")
+	fmt.Printf("received port  %s\n", port)
 	if port == "" {
 		port = "8080"
 		log.Printf("Defaulting to port %s", port)
