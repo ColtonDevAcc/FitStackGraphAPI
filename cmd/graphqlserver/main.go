@@ -28,6 +28,7 @@ func main() {
 
 	db := postgres.New(ctx, conf)
 
+	//! TODO: fix error
 	if err := db.Migrate(); err != nil {
 		log.Fatal(err)
 	}

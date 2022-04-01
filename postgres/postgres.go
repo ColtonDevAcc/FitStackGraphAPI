@@ -43,8 +43,6 @@ func New(ctx context.Context, conf *config.Config) *DB {
 		log.Fatalf("error connecting to postgres: %v", err)
 	}
 
-	fmt.Printf(dbConf.ConnString())
-
 	db := &DB{Pool: pool, conf: conf}
 
 	db.Ping(ctx)
@@ -57,7 +55,7 @@ func (db *DB) Ping(ctx context.Context) {
 		log.Fatalf("cant ping postgres: %v", err)
 	}
 
-	log.Println("postgres connected")
+	log.Println("ping: postgres connected")
 }
 
 func (db *DB) Close() {
@@ -70,8 +68,9 @@ func (db *DB) Drop() error {
 	migrationPath := fmt.Sprintf("file:///%s/migrations", path.Dir(b))
 
 	m, err := migrate.New(migrationPath, db.conf.Database.URL)
+
 	if err != nil {
-		return fmt.Errorf("error create the migrate instance: %v", err)
+		return fmt.Errorf("error creating the migration instance: %v", err)
 	}
 
 	if err := m.Drop(); err != nil {
