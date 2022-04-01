@@ -4,9 +4,11 @@ import (
 	"context"
 	"fmt"
 	"log"
+	"net"
 	"path"
 	"runtime"
 
+	"cloud.google.com/go/cloudsqlconn"
 	"github.com/golang-migrate/migrate/v4"
 	_ "github.com/golang-migrate/migrate/v4/database/postgres"
 	_ "github.com/golang-migrate/migrate/v4/source/file"
@@ -25,10 +27,23 @@ func New(ctx context.Context, conf *config.Config) *DB {
 		log.Fatalf("can't parse postgres config: %v", err)
 	}
 
+	// Create a new dialer with any options
+	d, err := cloudsqlconn.NewDialer(ctx)
+	if err != nil {
+		log.Fatalf("failed to initialize dialer: %v", err)
+	}
+	defer d.Close()
+
+	dbConf.ConnConfig.DialFunc = func(ctx context.Context, _ string, instance string) (net.Conn, error) {
+		return d.Dial(ctx, "fitstack-343223:us-central1:fitstackapi")
+	}
+
 	pool, err := pgxpool.ConnectConfig(ctx, dbConf)
 	if err != nil {
 		log.Fatalf("error connecting to postgres: %v", err)
 	}
+
+	fmt.Printf(dbConf.ConnString())
 
 	db := &DB{Pool: pool, conf: conf}
 

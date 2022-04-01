@@ -44,22 +44,23 @@ func LoadEnv(fileName string) {
 
 func New() *Config {
 	var (
-		dbUser                 = mustGetenv("DB_USER")                  // e.g. 'my-db-user'
-		dbPwd                  = mustGetenv("DB_PASS")                  // e.g. 'my-db-password'
-		instanceConnectionName = mustGetenv("INSTANCE_CONNECTION_NAME") // e.g. 'project:region:instance'
-		dbName                 = mustGetenv("DB_NAME")                  // e.g. 'my-database'
+		dbUser = mustGetenv("DB_USER") // e.g. 'my-db-user'
+		dbPwd  = mustGetenv("DB_PASS") // e.g. 'my-db-password'
+		// instanceConnectionName = mustGetenv("INSTANCE_CONNECTION_NAME") // e.g. 'project:region:instance'
+		dbName = mustGetenv("DB_NAME") // e.g. 'my-database'
 	)
 
-	socketDir, isSet := os.LookupEnv("DB_SOCKET_DIR")
-	if !isSet {
-		socketDir = "/cloudsql"
-	}
+	// socketDir, isSet := os.LookupEnv("DB_SOCKET_DIR")
+	// if !isSet {
+	// 	socketDir = "/cloudsql"
+	// }
 
-	dbURI := fmt.Sprintf("%s:%s@unix(/%s/%s)/%s?parseTime=true", dbUser, dbPwd, socketDir, instanceConnectionName, dbName)
+	// dbURI := fmt.Sprintf("%s:%s@unix(/%s/%s)/%s?parseTime=true", dbUser, dbPwd, socketDir, instanceConnectionName, dbName)
+	dsn := fmt.Sprintf("user=%s password=%s dbname=%s sslmode=disable", dbUser, dbPwd, dbName)
 
 	return &Config{
 		Database: database{
-			URL: dbURI,
+			URL: dsn,
 		},
 		JWT: jwt{
 			Secret: os.Getenv("JWT_SECRET"),

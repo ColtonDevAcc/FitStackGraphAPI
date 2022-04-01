@@ -5,15 +5,15 @@ mock:
 
 migrate:
 	migrate -source file://postgres/migrations \
-			-database postgres:postgres@unix(//cloudsql/fitstack-343223:us-central1:fitstackapi)/fitstackapi_development?parseTime=true up 
+			-database postgres://postgres:postgres@35.223.54.178:5432/fitstackapi_development?sslmode=disable up 
 
 rollback:
 	migrate -source file://postgres/migrations \
-			-database postgres:postgres@unix(//cloudsql/fitstack-343223:us-central1:fitstackapi)/fitstackapi_development?parseTime=true down
+			-database postgres://postgres:postgres@35.223.54.178:5432/fitstackapi_development?sslmode=disable down
 
 drop:
 	migrate -source file://postgres/migrations \
-			-database postgres:postgres@unix(//cloudsql/fitstack-343223:us-central1:fitstackapi)/fitstackapi_development?parseTime=true drop
+			-database postgres://postgres:postgres@35.223.54.178:5432/fitstackapi_development?sslmode=disable drop
 
 migration:
 	@read -p "Enter migration name: " name; \
