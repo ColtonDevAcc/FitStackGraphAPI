@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"log"
 	"net"
+	"os"
 	"path"
 	"runtime"
 
@@ -85,8 +86,9 @@ func (db *DB) Drop() error {
 func (db *DB) Migrate() error {
 	_, b, _, _ := runtime.Caller(0)
 	migrationPath := fmt.Sprintf("file:///%s/migrations", path.Dir(b))
+	dbURL := os.Getenv("DATABASE_URL")
 
-	m, err := migrate.New(migrationPath, db.conf.Database.URL)
+	m, err := migrate.New(migrationPath, dbURL)
 	if err != nil {
 		return fmt.Errorf("error creating migration instance: %v", err)
 	}
