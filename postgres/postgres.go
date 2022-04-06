@@ -85,9 +85,12 @@ func (db *DB) Drop() error {
 
 func (db *DB) Migrate() error {
 	_, b, _, _ := runtime.Caller(0)
-	migrationPath := fmt.Sprintf("file:///%s/migrations", path.Dir(b))
-	dbURL := os.Getenv("DATABASE_URL")
+	migrationPath := fmt.Sprintf("file://%s/migrations", path.Dir(b))
+	dbURL := os.Getenv("DATABASE_URL2")
 
+	fmt.Printf("this is your db URI ====== %v ======", migrationPath)
+
+	//!FIXME: this is a hack to get the migration to work
 	m, err := migrate.New(migrationPath, dbURL)
 	if err != nil {
 		return fmt.Errorf("error creating migration instance: %v", err)
